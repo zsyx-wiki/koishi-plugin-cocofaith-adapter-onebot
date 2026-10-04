@@ -1,0 +1,7 @@
+node_modules/
+lib/
+*.log
+*.tgz
+*.tsbuildinfo
+.DS_Store
+.env*
