@@ -1,7 +1,7 @@
 {
   "name": "@mueo/koishi-plugin-cocofaith-adapter-onebot",
   "version": "3.0.0-alpha.3",
-  "description": "CoCoFaith v3 OneBot \u5e73\u53f0\u63a5\u5165",
+  "description": "CoCoFaith v3 OneBot 平台接入",
   "author": "Mueo <mueo@mueoo.com>",
   "repository": {
     "type": "git",
