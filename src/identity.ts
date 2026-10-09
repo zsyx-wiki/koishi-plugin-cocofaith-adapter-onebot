@@ -1,4 +1,4 @@
-import type { Context, Session } from "koishi";
+import type { Context,Session } from "koishi";
 import type { OneBotAdapterContext } from "./contracts";
 
 export function onebotIdentity(session: Session) {

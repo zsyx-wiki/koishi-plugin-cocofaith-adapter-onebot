@@ -1,7 +1,7 @@
 {
   "name": "@mueo/koishi-plugin-cocofaith-adapter-onebot",
   "version": "3.0.0-alpha.3",
-  "description": "CoCoFaith v3 OneBot 平台接入",
+  "description": "CoCoFaith v3 OneBot \u5e73\u53f0\u63a5\u5165",
   "author": "Mueo <mueo@mueoo.com>",
   "repository": {
     "type": "git",
@@ -14,11 +14,15 @@
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "typings": "lib/index.d.ts",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsup",
     "watch": "tsup -w",
-    "test": "npm run build && node --test tests/*.test.cjs"
+    "test": "npm run typecheck && npm run build && node --test tests/*.test.cjs",
+    "format": "node scripts/format-source.cjs src config.ts messages.ts",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "koishi": "^4.16.0"
@@ -38,7 +42,11 @@
   "koishi": {
     "name": "CoCoFaith Adapter OneBot",
     "services": {
-      "required": ["faithCore", "faithBusiness", "database"]
+      "required": [
+        "faithCore",
+        "faithBusiness",
+        "database"
+      ]
     }
   }
 }

@@ -1,11 +1,11 @@
-import { Context, Session } from "koishi";
-import { Config as ConfigSchema, type Config as OneBotConfig } from "../config";
+import { Context,Session } from "koishi";
+import { Config as ConfigSchema,type Config as OneBotConfig } from "../config";
 import { OneBotBroadcaster } from "./broadcast";
-import { isBindingCommand, normalizeOneBotContent } from "./content";
+import { isBindingCommand,normalizeOneBotContent } from "./content";
+import type { BusinessResult,OneBotAdapterContext } from "./contracts";
 import { onebotIdentity } from "./identity";
 import { renderAndSendOneBot } from "./render";
 import { COCOFAITH_ONEBOT_ADAPTER_VERSION } from "./version";
-import type { BusinessResult, OneBotAdapterContext } from "./contracts";
 
 export const name = "cocofaith-adapter-onebot";
 export const inject = ["faithCore", "faithBusiness", "database"] as const;
@@ -83,8 +83,8 @@ function assertDependencies(ctx: OneBotAdapterContext) {
 }
 
 export * from "./broadcast";
-export type * from "./contracts";
 export * from "./content";
+export type * from "./contracts";
 export * from "./identity";
 export * from "./render";
 export * from "./version";

@@ -1,4 +1,4 @@
-import { h, type Context, type Session } from "koishi";
+import { h,type Context,type Session } from "koishi";
 import type { BusinessResult } from "./contracts";
 
 type BroadcastNotice = NonNullable<BusinessResult["broadcast"]>;

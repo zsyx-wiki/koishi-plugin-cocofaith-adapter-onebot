@@ -1,5 +1,5 @@
-import { h, type Session } from "koishi";
-import type { BusinessResult, MessageNode } from "./contracts";
+import { h,type Session } from "koishi";
+import type { BusinessResult,MessageNode } from "./contracts";
 
 export async function renderAndSendOneBot(
   session: Session,
