@@ -5,3 +5,6 @@ lib/
 *.tsbuildinfo
 .DS_Store
 .env*
+
+# Isolated CI test implementations
+.test-deps/
