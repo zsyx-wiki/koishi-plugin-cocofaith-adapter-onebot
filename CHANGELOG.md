@@ -2,6 +2,7 @@
 
 ## 3.0.0-alpha.5
 
+- 整理消息筛选、业务分发和发送流程，卸载后丢弃仍在执行的回复。
 - 包名改为 `koishi-plugin-cocofaith-adapter-onebot`，支持多 Adapter 同时启用。
 - 修复 ESM 入口加载失败。
 

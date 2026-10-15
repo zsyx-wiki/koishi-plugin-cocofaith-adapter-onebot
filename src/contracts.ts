@@ -1,5 +1,5 @@
 import type { FaithCoreServiceContract } from "cocofaith-sdk/core";
-import type { GameplayImageNode,GameplayResult,GameplayTextNode } from "cocofaith-sdk/gameplay";
+import type { GameplayImageNode, GameplayResult, GameplayTextNode } from "cocofaith-sdk/gameplay";
 import type { FaithBusinessAdapterContract } from "cocofaith-sdk/protocol";
 import type { Context } from "koishi";
 
