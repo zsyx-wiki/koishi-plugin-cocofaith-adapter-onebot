@@ -5,7 +5,7 @@
 
   <p>
     <img alt="Koishi" src="https://img.shields.io/badge/Koishi-4.16%2B-60a5fa?style=flat-square">
-    <img alt="Version" src="https://img.shields.io/badge/version-3.0.0--alpha.5-a78bfa?style=flat-square">
+    <img alt="Version" src="https://img.shields.io/badge/version-3.0.0--rc.1-a78bfa?style=flat-square">
     <img alt="License" src="https://img.shields.io/badge/License-GPL--3.0-52b788?style=flat-square">
     <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178c6?style=flat-square&logo=typescript&logoColor=white">
   </p>
@@ -20,7 +20,7 @@
 ## 安装
 
 ```sh
-npm install koishi-plugin-cocofaith@alpha koishi-plugin-cocofaith-adapter-onebot@alpha
+npm install koishi-plugin-cocofaith@rc koishi-plugin-cocofaith-adapter-onebot@rc
 ```
 
 启用 Koishi 数据库和 OneBot 机器人连接后，添加 `cocofaith`，
