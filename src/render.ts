@@ -5,11 +5,12 @@ export async function renderAndSendOneBot(
   session: Session,
   result: BusinessResult,
   broadcast?: (notice: NonNullable<BusinessResult["broadcast"]>) => void,
+  canSend: () => boolean = () => true,
 ) {
   if (result.broadcast) broadcast?.(result.broadcast);
   if (result.type === "silent") return;
   if (result.type === "text") return session.send(result.content);
-  if (result.type === "image") return sendImage(session, result.url, result.fallback);
+  if (result.type === "image") return sendImage(session, result.url, result.fallback, canSend);
   return session.send(result.content.map(renderNode));
 }
 
@@ -17,10 +18,16 @@ function renderNode(node: MessageNode) {
   return node.type === "text" ? h.text(node.content) : h.image(node.url);
 }
 
-async function sendImage(session: Session, url: string, fallback?: string) {
+async function sendImage(
+  session: Session,
+  url: string,
+  fallback: string | undefined,
+  canSend: () => boolean,
+) {
   try {
     return await session.send(h.image(url));
   } catch (error) {
+    if (!canSend()) return;
     if (fallback) return session.send(fallback);
     throw error;
   }

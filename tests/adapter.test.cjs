@@ -362,3 +362,37 @@ for (const outcome of ["result", "error", "throw"]) {
     assert.deepEqual(sent, []);
   });
 }
+
+test("disposal suppresses image fallback after an in-flight send fails", async () => {
+  let release, entered;
+  const ready = new Promise((resolve) => {
+    entered = resolve;
+  });
+  const pending = new Promise((_, reject) => {
+    release = reject;
+  });
+  const fixture = createContext({
+    faithBusiness: {
+      acceptsCommand: () => true,
+      dispatch: async () => ({
+        matched: true,
+        result: { type: "image", url: "https://example.com/image.png", fallback: "fallback" },
+      }),
+    },
+  });
+  onebot.apply(fixture.ctx, { mode: "normal", enableBroadcast: false });
+  let attempts = 0;
+  const { session } = createSession({
+    send: async () => {
+      attempts++;
+      entered();
+      await pending;
+    },
+  });
+  const execution = fixture.middleware(session, async () => {});
+  await ready;
+  fixture.dispose();
+  release(new Error("image failed"));
+  await execution;
+  assert.equal(attempts, 1);
+});

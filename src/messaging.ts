@@ -20,7 +20,7 @@ export class OneBotMessageSender {
     const broadcast = this.config.enableBroadcast
       ? (notice: NonNullable<BusinessResult["broadcast"]>) => this.broadcaster.send(session, notice)
       : undefined;
-    return renderAndSendOneBot(session, result, broadcast);
+    return renderAndSendOneBot(session, result, broadcast, () => this.active);
   }
 
   sendText(session: Session, content: string): Promise<unknown> {
