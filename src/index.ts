@@ -1,3 +1,4 @@
+import { provideFaithAdapter } from "cocofaith-sdk/adapter";
 import { Context,Session } from "koishi";
 import { Config as ConfigSchema,type Config as OneBotConfig } from "../config";
 import { OneBotBroadcaster } from "./broadcast";
@@ -8,11 +9,19 @@ import { renderAndSendOneBot } from "./render";
 import { COCOFAITH_ONEBOT_ADAPTER_VERSION } from "./version";
 
 export const name = "cocofaith-adapter-onebot";
-export const inject = ["faithCore", "faithBusiness", "database"] as const;
+export const inject = [] as const;
 export const Config = ConfigSchema;
 export type Config = OneBotConfig;
 
 export function apply(ctx: Context, config: Config) {
+  provideFaithAdapter(ctx, {
+    id: name, name: "CoCoFaith Adapter OneBot", platform: "onebot",
+    version: COCOFAITH_ONEBOT_ADAPTER_VERSION, mode: config.mode ?? "binding",
+  });
+  ctx.inject(["faithCore", "faithBusiness", "database"], ctx => applyTransport(ctx, config));
+}
+
+function applyTransport(ctx: Context, config: Config) {
   const services = ctx as OneBotAdapterContext;
   assertDependencies(services);
   const logger = ctx.logger("cocofaith-adapter-onebot");

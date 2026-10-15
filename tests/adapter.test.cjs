@@ -7,6 +7,8 @@ function createContext(overrides = {}) {
   let dispose
   const logs = []
   const ctx = {
+    plugin(Plugin, info) { const registry = new Plugin({ set() {} }); registry.fork(this, info) },
+    inject(dependencies, apply) { apply(this) },
     bots: [],
     database: { getAssignedChannels: async () => [] },
     broadcast: async () => {},
@@ -158,4 +160,49 @@ test("normal mode can explicitly allow OneBot registration", async () => {
   onebot.apply(fixture.ctx, { mode: "normal", allowRegistration: true, enableBroadcast: false })
   await fixture.middleware(createSession({ content: "信仰 注册 真理", stripped: { content: "信仰 注册 真理" } }).session, async () => {})
   assert.equal(event.adapter.allowRegistration, true)
+})
+
+
+test('adapter advertises faithAdapter before business exists and releases injected handlers on unload', async () => {
+  const { App } = require('koishi')
+  const app = new App()
+  const baseline = app.$processor._hooks.length
+  const fork = app.plugin(onebot, { mode: 'normal', commandPanel: { enabled: false } })
+  await app.start()
+  assert.equal(app.faithAdapter.has('onebot'), true)
+  assert.equal(app.$processor._hooks.length, baseline)
+  let released = 0
+  const services = app.plugin({ name: 'compatible-services', apply(ctx) {
+    ctx.set('faithCore', {
+      adapter: { resolve: async () => null },
+      permissions: { register: () => ({ dispose() { released++ } }) },
+    })
+    ctx.set('faithBusiness', { acceptsCommand: () => false, dispatch: async () => ({ matched: false }) })
+    if (!ctx.get('database')) ctx.set('database', { getAssignedChannels: async () => [] })
+  } })
+  await app.events.flush()
+  assert.equal(app.$processor._hooks.length, baseline + 1)
+  fork.update({ mode: 'binding', commandPanel: { enabled: false } })
+  await app.events.flush()
+  assert.equal(app.faithAdapter.list()[0].mode, 'binding')
+  assert.equal(app.$processor._hooks.length, baseline + 1)
+  services.dispose()
+  await app.events.flush()
+  assert.equal(app.faithAdapter.has('onebot'), true)
+  assert.equal(app.$processor._hooks.length, baseline)
+  fork.dispose()
+  await app.events.flush()
+  assert.equal(app.faithAdapter, undefined)
+  assert.equal(app.$processor._hooks.length, baseline)
+  await app.stop()
+})
+
+
+test('ESM artifact loads in an isolated Node host', () => {
+  const { spawnSync } = require('node:child_process')
+  const { pathToFileURL } = require('node:url')
+  const path = require('node:path')
+  const target = pathToFileURL(path.resolve(__dirname, '../lib/index.mjs')).href
+  const result = spawnSync(process.execPath, ['--input-type=module', '-e', `await import(${JSON.stringify(target)})`], { encoding: 'utf8' })
+  assert.equal(result.status, 0, result.stderr)
 })
